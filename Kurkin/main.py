@@ -1,8 +1,3 @@
-#!/usr/bin/python
-
-# This is a simple echo bot using the decorator mechanism.
-# It echoes any incoming text messages.
-
 import telebot
 from config import API_TOKEN
 from telebot.types import (KeyboardButton,
@@ -10,35 +5,64 @@ from telebot.types import (KeyboardButton,
                            ReplyKeyboardRemove,
                            Message)
 
-keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
 
+keyboard = ReplyKeyboardMarkup()
+button = KeyboardButton(text="FAAAAAAh")
+button2 = KeyboardButton(text="дай-ка подумать...нет")
 
-button1 = telebot.types.KeyboardButton(text="Кнопка 1")
-button2 = telebot.types.KeyboardButton(text="Кнопка 2")
-keyboard.add(button1)
+keyboard.add(button)
 keyboard.add(button2)
-keyboard.add('1', '2')
-# keyboard.row('5', '6', '7')
+
 
 bot = telebot.TeleBot(API_TOKEN)
-print(API_TOKEN)
 
+state = 0
 
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['help', 'start'])
 def send_welcome(message: Message):
-    bot.reply_to(message, f'Привет!, {message.from_user.first_name}')
-
-# Handle all other messages with content_type 'text' (content_types defaults to ['text'])
-@bot.message_handler(func=lambda message: True)
-def echo_message(message):
-    bot.reply_to(message, message.text)
+    global state
+    hello_message = f'Мы знакомы, <b>{message.from_user.username}</b>?'
     bot.send_message(
         message.chat.id,
-        'hello_message',
+        hello_message,
         reply_markup=keyboard,
-        parse_mode='HTML'
-    )
+        parse_mode='HTML' 
+
+state = 1
+
+  @bot.message_handler(func=lambda message: True)
+def echo_message(message: Message):
+    global state
+    if message.text == "FAAAAAAh" and state == 1:
+        bot.send_message(
+            message.from_user.id,
+            'Ну тогда давай сыграем в игру?',
+        )
+    elif message.text == "дай-ка подумать...нет" and state == 1:
+        bot.send_message(
+            message.from_user.id,
+            'тогда надо познакомиться, меня зовут Роберт, давай поиграем?',
+        )
+      
+    state = 2
+
+  elif message.text == "давай" and state == 2:
+        bot.send_message(
+            message.from_user.id,
+            'отлично, выбери в какую в дверь пойдешь:в левую или в правую?',
+        )
+  elif message.text == "давай" and state == 1:
+        bot.send_message(
+            message.from_user.id,
+            'отлично, выбери в какую в дверь пойдешь:в левую или в правую?',
+        )
+    else:
+        bot.send_message(
+            message.from_user.id,
+            'ты мне не нравишься...уходи'
+        )
+
 
 
 bot.infinity_polling()
