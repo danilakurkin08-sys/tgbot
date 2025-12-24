@@ -49,24 +49,42 @@ def echo_message(message: Message):
     elif message.text == "дай-ка подумать...нет" and state == 1:
         bot.send_message(
             message.from_user.id,
-            'тогда надо познакомиться, меня зовут Роберт, давай поиграем?',
+            'Тогда надо познакомиться, меня зовут Роберт, давай поиграем?',
              reply_markup=ReplyKeyboardMarkup().add("ну давай","не хочу" )
         )
 
     elif message.text == "ну давай" and state == 2:
         bot.send_message(
             message.from_user.id,
-            'отлично, выбери в какую в дверь пойдешь:в левую или в правую?',
+            'Отлично, выбери в какую в дверь пойдешь:в левую или в правую?',
             reply_markup=ReplyKeyboardMarkup().add("левая","правая")
         )
             
     elif message.text == "ну давай" and state == 2:
         bot.send_message(
             message.from_user.id,
-            'отлично, выбери в какую в дверь пойдешь:в левую или в правую?',
+            'Отлично, выбери в какую в дверь пойдешь:в левую или в правую?',
             reply_markup=ReplyKeyboardMarkup().add("левая","правая")
         )
-            
+        state = 3
+
+  elif message.text == "левая" and state == 3:
+        bot.send_message(
+            message.from_user.id,
+            'Тебе сегодня повезло, однако не думай, что всё так быстро закончится ха-ха-ха',
+             reply_markup=ReplyKeyboardMarkup().add("ты это о чём?..." )
+        )
+        state = 4
+  elif message.text == "правая" and state == 3:
+        bot.send_message(
+            message.from_user.id,
+            'Не угадал...) ха-ха-ха, прощай, дружок, наша встреча была прекрасной, но недолгой)))',
+        )
+  elif message.text == "ты это о чём?..." and state == 4:
+        bot.send_message(
+            message.from_user.id,
+            'Не угадал...) ха-ха-ха, прощай, дружок, наша встреча была прекрасной, но недолгой)))',
+        )
     else:
         bot.send_message(
             message.from_user.id,
@@ -76,3 +94,4 @@ def echo_message(message: Message):
 
 
 bot.infinity_polling()
+
