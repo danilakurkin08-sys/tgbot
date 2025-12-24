@@ -65,7 +65,8 @@ def echo_message(message: Message):
             message.from_user.id,
             'Отлично, выбери в какую в дверь пойдешь:в левую или в правую?',
             reply_markup=ReplyKeyboardMarkup().add("левая","правая")
-        )
+        
+        
         state = 3
 
   elif message.text == "левая" and state == 3:
@@ -91,7 +92,6 @@ def echo_message(message: Message):
             'ты мне не нравишься...уходи'
         )
 
-
-
 bot.infinity_polling()
+
 
